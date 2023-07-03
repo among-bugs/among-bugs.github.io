@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>model 1</title>
+    <meta name="description" content="Пробный макет">
+    <script>
+        (function() {
+
+            // JavaScript snippet handling Dark/Light mode switching
+
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+
+                if (forcedTheme) return forcedTheme;
+
+                const storedTheme = getStoredTheme();
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+
+                if (pageTheme) {
+                    return pageTheme;
+                }
+
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+
+                if (!themeSwitchers.length) return;
+
+                for (const themeSwitcher of themeSwitchers) {
+
+                    const themeSwitcherText = document.querySelector('#theme-text');
+                    const activeThemeIcon = document.querySelector('.theme-icon-active use');
+                    const btnToActive = document.querySelector('[data-bs-theme-value="' + theme + '"]');
+
+                    document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                        element.classList.remove('active');
+                        element.setAttribute('aria-pressed', 'false');
+                    });
+
+                    btnToActive.classList.add('active');
+                    btnToActive.setAttribute('aria-pressed', 'true');
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const theme = toggle.getAttribute('data-bs-theme-value');
+                            setStoredTheme(theme);
+                            setTheme(theme);
+                            showActiveTheme(theme);
+                        })
+                    })
+            });
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/Navbar-With-Button-icons.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand sticky-top shadow py-3" style="height: 60px;">
+        <div class="container">
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navcol-1"><a class="navbar-brand d-flex align-items-center" href="#" data-bs-target="#offcanvas-menu" data-bs-toggle="offcanvas"><span style="font-size: 18px;"><i class="far fa-map" style="border-top-color: rgb(0,130,155);color: rgb(0,130,155);"></i>&nbsp;Меню</span></a><button class="btn border rounded-0 border-dark-subtle d-flex justify-content-center align-items-center" type="button" style="color: var(--bs-navbar-hover-color);" data-bs-target="#modal-1" data-bs-toggle="modal"><i class="fas fa-search"></i>&nbsp;Поиск</button>
+                <div class="theme-switcher dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: rgb(0,0,0);"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill mb-1" style="color: var(--bs-orange);font-size: 20px;margin-left: 4px;">
+                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+                        </svg></a>
+                    <div class="dropdown-menu dropdown-menu-start"><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="light"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill opacity-50 me-2">
+                                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+                            </svg>Светлый</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="dark"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-moon-stars-fill opacity-50 me-2">
+                                <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"></path>
+                                <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"></path>
+                            </svg>Темный</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-circle-half opacity-50 me-2">
+                                <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
+                            </svg>Авто</a></div>
+                </div>
+                <ul class="navbar-nav d-flex justify-content-end">
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link d-flex justify-content-center align-items-center" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                            <figure class="figure d-flex flex-fill justify-content-center align-items-center" style="margin-bottom: 0;"><img class="img-fluid figure-img" width="32" height="24" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAAGFBMVEX////VKx4AOab2+f0AN6UEOaPOKxwFPKiWjACKAAAA+UlEQVR4nO3QsQGDAAzAsFCg/P8xezyxSydoBgAAAAAAAAAAAAAAAAAAAOCjk20etrnY5sfmpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aTmZps/2xxsTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTmpFw4O1+wE1Ff8AAAAAElFTkSuQmCC" style="border: 1px solid var(--bs-navbar-brand-color);margin-bottom: 0;width: 24px;"></figure>&nbsp;Русский
+                        </a>
+                        <div class="dropdown-menu text-start" style="border-top-left-radius: 1px;border-top-right-radius: 1px;border-bottom-right-radius: 1px;border-bottom-left-radius: 1px;border-width: 2px;margin-right: -1px;padding-left: 0px;margin-left: -51px;margin-top: 29px;"><a class="dropdown-item" href="#">Қазақша</a><a class="dropdown-item" href="#">Русский</a><a class="dropdown-item" href="#">English</a></div>
+                    </li>
+                    <li class="nav-item"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container text-start" style="height: auto;padding: 12px;padding-bottom: 0px;"><span style="font-size: 20px;"><i class="fas fa-list-ul" style="border-top-color: rgb(0,130,155);color: rgb(0,130,155);font-size: 24px;"></i>&nbsp;Места</span></div>
+    <div class="row" style="margin: 0px;">
+        <div class="col d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><button class="btn btn-primary d-flex flex-column flex-fill justify-content-center align-items-center" type="button" style="margin: 8px;margin-right: 8px;height: 100px;background: linear-gradient(100deg, rgb(0,130,155), rgba(56,209,238,0.95) 100%);border-width: 0px;border-color: rgb(0,130,155);border-top-style: solid;border-top-color: rgb(0,130,155);border-left-width: 2px;box-shadow: -2px 4px 19px 0px rgba(0,130,155,0.54);" data-bs-target="#toast-1" data-bs-toggle="toast"><i class="fas fa-tree" style="font-size: 24px;"></i><span style="text-shadow: 0px 0px 2px rgb(44,44,44);">Парки</span></button></div>
+        <div class="col d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><button class="btn btn-primary d-flex flex-column flex-fill justify-content-center align-items-center" type="button" style="margin: 8px;margin-right: 8px;height: 100px;background: linear-gradient(100deg, rgb(0,130,155), rgba(56,209,238,0.95) 100%);border-width: 0px;border-color: rgb(0,130,155);border-top-style: solid;border-top-color: rgb(0,130,155);border-left-width: 2px;box-shadow: -2px 4px 19px 0px rgba(0,130,155,0.54);"><i class="fas fa-smile-beam" style="font-size: 24px;"></i><span style="text-shadow: 0px 0px 2px rgb(44,44,44);">Развлечения</span></button></div>
+        <div class="col-6 d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><button class="btn btn-primary d-flex flex-column flex-fill justify-content-center align-items-center" type="button" style="margin: 8px;margin-right: 8px;height: 100px;background: linear-gradient(100deg, rgb(0,130,155), rgba(56,209,238,0.95) 100%);border-width: 0px;border-color: rgb(0,130,155);border-top-style: solid;border-top-color: rgb(0,130,155);border-left-width: 2px;box-shadow: -2px 4px 19px 0px rgba(0,130,155,0.54);"><i class="fas fa-chess-queen" style="font-size: 24px;"></i><span style="text-shadow: 0px 0px 2px rgb(44,44,44);">Музеи</span></button></div>
+        <div class="col-6 d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><a class="btn btn-primary d-flex flex-column flex-fill justify-content-center align-items-center" role="button" style="margin: 8px;margin-right: 8px;height: 100px;background: linear-gradient(100deg, rgb(0,130,155), rgba(56,209,238,0.95) 100%);border-width: 0px;border-color: rgb(0,130,155);border-top-style: solid;border-top-color: rgb(0,130,155);border-left-width: 2px;box-shadow: -2px 4px 19px 0px rgba(0,130,155,0.54);" href="lists-1.html"><i class="fas fa-archway" style="font-size: 24px;"></i><span style="text-shadow: 0px 0px 2px rgb(44,44,44);">Мавзолеи</span></a></div>
+    </div>
+    <div class="toast fade font-monospace text-truncate text-break hide" role="alert" data-bs-delay="2000" id="toast-1">
+        <div class="toast-header"><img class="me-2"><strong class="me-auto">Это макет. Нажмите в "Мавзолеи"</strong><button class="btn-close ms-2 mb-1 close" type="button" aria-label="Close" data-bs-dismiss="toast"></button></div>
+    </div>
+    <nav class="navbar navbar-light navbar-expand fixed-bottom border-dark d-flex flex-fill justify-content-center align-items-center" style="box-shadow: 1px 0px 12px 1px var(--bs-navbar-disabled-color);padding-top: 0;padding-bottom: 0;margin-right: 0px;height: 60px;background: transparent;">
+        <div class="container-fluid">
+            <div class="btn-group flex-fill" role="group"><a class="btn d-flex flex-column align-items-center" role="button" id="bottom-nav-btn" style="color: var(--bs-link-hover-color);" href="index.html"><i class="fas fa-list-ul" style="font-size: 18px;color: #00829b;"></i><span class="d-flex" style="font-size: 13px;color: #00829b;">Список мест</span></a><a class="btn d-flex flex-column align-items-center" role="button" id="bottom-nav-btn" style="color: var(--bs-navbar-color);" href="map.html"><i class="fas fa-map-marker-alt" style="font-size: 18px;color: var(--bs-gray-600);"></i><span class="d-flex" style="font-size: 13px;color: var(--bs-gray-600);">Карта</span></a><a class="btn d-flex flex-column align-items-center" role="button" id="bottom-nav-btn" style="/*color: var(--bs-navbar-color);*/" href="heart.html"><i class="fas fa-heart" style="font-size: 18px;color: var(--bs-gray-600);"></i><span class="d-flex" style="font-size: 13px;color: var(--bs-gray-600);">Избранное</span></a></div>
+        </div>
+    </nav>
+    <div class="offcanvas offcanvas-start bg-body" tabindex="-1" data-bs-backdrop="false" id="offcanvas-menu">
+        <div class="offcanvas-header"><a class="link-body-emphasis d-flex align-items-center me-md-auto mb-3 mb-md-0 text-decoration-none" href="/"><i class="fas fa-map me-3" style="font-size: 25px;color: #00829b;"></i><span class="fs-4">KazMaps</span></a><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="offcanvas"></button></div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between pt-0">
+            <div>
+                <hr class="mt-0">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item"><a class="nav-link active link-light" href="#" aria-current="page" style="background: #00829b;border-radius: 2px;"><i class="fas fa-home me-2"></i>Главная</a></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-list-ul me-2"></i> Список мест</a><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-map-marker-alt me-2"></i> Карта</a></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-newspaper me-2"></i> Новости</a></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-file-contract me-2"></i>&nbsp;Обратная связь</a></li>
+                </ul>
+            </div>
+            <div>
+                <hr>
+                <div class="dropdown show"><a class="dropdown-toggle link-body-emphasis d-flex align-items-center text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown" role="button"><img class="rounded-circle me-2" alt="" width="32" height="32" src="assets/img/index.png" style="object-fit: cover;"><strong>Привет, Султангали</strong>&nbsp;</a>
+                    <div class="dropdown-menu show shadow text-small" data-bs-popper="none" data-popper-placement="top-start"><a class="dropdown-item" href="#">Профиль</a><a class="dropdown-item" href="#">История</a><a class="dropdown-item" href="#">Настройки</a>
+                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Выйти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="modal-1">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Поиск</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center" style="border-radius: 0px;"><input type="search" style="border-top-left-radius: 4px;border-bottom-left-radius: 4px;width: 228px;border: 1px solid rgb(0,130,155);padding-left: 10px;" placeholder="Введите"><button class="btn btn-primary" type="button" style="border-radius: 0px;background: rgb(0,130,155);border-style: solid;border-color: rgb(0,130,155);border-top-right-radius: 4px;border-bottom-right-radius: 4px;">Искать</button></div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+</body>
+
+</html>

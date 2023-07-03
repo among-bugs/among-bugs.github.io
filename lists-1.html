@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>model 1</title>
+    <meta name="description" content="Пробный макет">
+    <script>
+        (function() {
+
+            // JavaScript snippet handling Dark/Light mode switching
+
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+
+                if (forcedTheme) return forcedTheme;
+
+                const storedTheme = getStoredTheme();
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+
+                if (pageTheme) {
+                    return pageTheme;
+                }
+
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+
+                if (!themeSwitchers.length) return;
+
+                for (const themeSwitcher of themeSwitchers) {
+
+                    const themeSwitcherText = document.querySelector('#theme-text');
+                    const activeThemeIcon = document.querySelector('.theme-icon-active use');
+                    const btnToActive = document.querySelector('[data-bs-theme-value="' + theme + '"]');
+
+                    document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                        element.classList.remove('active');
+                        element.setAttribute('aria-pressed', 'false');
+                    });
+
+                    btnToActive.classList.add('active');
+                    btnToActive.setAttribute('aria-pressed', 'true');
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const theme = toggle.getAttribute('data-bs-theme-value');
+                            setStoredTheme(theme);
+                            setTheme(theme);
+                            showActiveTheme(theme);
+                        })
+                    })
+            });
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/Navbar-With-Button-icons.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand sticky-top shadow py-3" style="height: 60px;">
+        <div class="container">
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navcol-1"><a class="navbar-brand d-flex align-items-center" href="#" data-bs-target="#offcanvas-menu" data-bs-toggle="offcanvas"><span style="font-size: 18px;"><i class="far fa-map" style="border-top-color: rgb(0,130,155);color: rgb(0,130,155);"></i>&nbsp;Меню</span></a><button class="btn border rounded-0 border-dark-subtle d-flex justify-content-center align-items-center" type="button" style="color: var(--bs-navbar-hover-color);" data-bs-target="#modal-1" data-bs-toggle="modal"><i class="fas fa-search"></i>&nbsp;Поиск</button>
+                <div class="theme-switcher dropdown"><a aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: rgb(0,0,0);"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill mb-1" style="color: var(--bs-orange);font-size: 20px;margin-left: 4px;">
+                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+                        </svg></a>
+                    <div class="dropdown-menu dropdown-menu-start"><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="light"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-sun-fill opacity-50 me-2">
+                                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+                            </svg>Светлый</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="dark"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-moon-stars-fill opacity-50 me-2">
+                                <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"></path>
+                                <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"></path>
+                            </svg>Темный</a><a class="dropdown-item d-flex align-items-center" href="#" data-bs-theme-value="auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-circle-half opacity-50 me-2">
+                                <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
+                            </svg>Авто</a></div>
+                </div>
+                <ul class="navbar-nav d-flex justify-content-end">
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link d-flex justify-content-center align-items-center" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                            <figure class="figure d-flex flex-fill justify-content-center align-items-center" style="margin-bottom: 0;"><img class="img-fluid figure-img" width="32" height="24" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAAGFBMVEX////VKx4AOab2+f0AN6UEOaPOKxwFPKiWjACKAAAA+UlEQVR4nO3QsQGDAAzAsFCg/P8xezyxSydoBgAAAAAAAAAAAAAAAAAAAOCjk20etrnY5sfmpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aTmZps/2xxsTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTkpJ+WknJSTclJOykk5KSflpJyUk3JSTspJOSkn5aSclJNyUk7KSTmpFw4O1+wE1Ff8AAAAAElFTkSuQmCC" style="border: 1px solid var(--bs-navbar-brand-color);margin-bottom: 0;width: 24px;"></figure>&nbsp;Русский
+                        </a>
+                        <div class="dropdown-menu text-start" style="border-top-left-radius: 1px;border-top-right-radius: 1px;border-bottom-right-radius: 1px;border-bottom-left-radius: 1px;border-width: 2px;margin-right: -1px;padding-left: 0px;margin-left: -51px;margin-top: 29px;"><a class="dropdown-item" href="#">Қазақша</a><a class="dropdown-item" href="#">Русский</a><a class="dropdown-item" href="#">English</a></div>
+                    </li>
+                    <li class="nav-item"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container text-start" style="height: auto;padding: 12px;padding-bottom: 12px;"><span style="font-size: 20px;"><i class="fas fa-list-ul" style="border-top-color: rgb(0,130,155);color: rgb(0,130,155);font-size: 24px;"></i>&nbsp;Места</span></div>
+    <ol class="breadcrumb" style="margin: 0px 12px;padding-left: 12px;color: #00829b;border-top: 1px solid #00829b;border-bottom: 1px solid #00829b;margin-bottom: 12px;">
+        <li class="breadcrumb-item"><a id="crumb" href="#"><span>Мавзолеи</span></a></li>
+    </ol>
+    <div class="row" style="margin: 0px;">
+        <div class="col-12 d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><a class="btn btn-primary text-start bg-info shadow d-flex flex-column flex-fill justify-content-center align-items-start" role="button" style="margin: 8px;margin-right: 8px;height: 180px;background: url(&quot;https://gdb.rferl.org/8052AA78-4F63-41BD-8843-E3B265624D78_w1200_r1.jpg&quot;) center / cover no-repeat;border-style: solid;border-color: #00829b;border-top-style: solid;border-top-color: #00829b;border-right-style: solid;border-right-color: #00829b;border-bottom-style: solid;border-bottom-color: #00829b;border-left-style: solid;border-left-color: #00829b;opacity: 1;filter: blur(0px);" data-bs-target="#toast-1" data-bs-toggle="toast" href="lists-1-1.html"><span style="font-size: 24px;text-align: left;background: var(--bs-btn-active-color);padding-top: 0px;padding-bottom: 0px;padding-left: 12px;padding-right: 12px;color: #00829b;font-weight: bold;">Ходжа Ахмед Ясави</span><span style="font-size: 18px;text-shadow: 0px 0px 4px rgb(0,0,0);font-weight: bold;">(1093-1166)</span></a></div>
+        <div class="col-12 d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><button class="btn btn-primary text-start bg-info shadow d-flex flex-column flex-fill justify-content-center align-items-start" type="button" style="margin: 8px;margin-right: 8px;height: 180px;background: url(&quot;https://tengritravel.kz/userdata/news/2021/news_451257/thumb_m/photo_376962.jpeg&quot;) center / cover no-repeat;border-style: solid;border-color: #00829b;border-top-style: solid;border-top-color: #00829b;border-right-style: solid;border-right-color: #00829b;border-bottom-style: solid;border-bottom-color: #00829b;border-left-style: solid;border-left-color: #00829b;opacity: 1;filter: blur(0px);" data-bs-target="#toast-1" data-bs-toggle="toast"><span style="font-size: 24px;text-align: left;background: var(--bs-btn-active-color);padding-top: 0px;padding-bottom: 0px;padding-left: 12px;padding-right: 12px;color: #00829b;font-weight: bold;">Арыстан баб</span><span style="font-size: 18px;text-shadow: 0px 0px 4px rgb(0,0,0);font-weight: bold;">(571-632)</span></button></div>
+        <div class="col-12 d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><button class="btn btn-primary text-start bg-info shadow d-flex flex-column flex-fill justify-content-center align-items-start" type="button" style="margin: 8px;margin-right: 8px;height: 180px;background: url(&quot;data:image/jpeg;base64,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&quot;) center / cover no-repeat;border-style: solid;border-color: #00829b;border-top-style: solid;border-top-color: #00829b;border-right-style: solid;border-right-color: #00829b;border-bottom-style: solid;border-bottom-color: #00829b;border-left-style: solid;border-left-color: #00829b;opacity: 1;filter: blur(0px);" data-bs-target="#toast-1" data-bs-toggle="toast"><span style="font-size: 24px;text-align: left;background: var(--bs-btn-active-color);padding-top: 0px;padding-bottom: 0px;padding-left: 12px;padding-right: 12px;color: #00829b;font-weight: bold;">Есим хан</span><span style="font-size: 18px;text-shadow: 0px 0px 4px rgb(0,0,0);font-weight: bold;">(1565-1628)</span></button></div>
+        <div class="col-12 d-flex justify-content-center align-items-center" style="padding: 4px 2px;padding-right: 2px;padding-left: 2px;"><button class="btn btn-primary text-start bg-info shadow d-flex flex-column flex-fill justify-content-center align-items-start" type="button" style="margin: 8px;margin-right: 8px;height: 180px;background: url(&quot;https://azretsultan.kz/rus/wp-content/uploads/2020/03/1425-1024x768.jpg&quot;) center / cover no-repeat;border-style: solid;border-color: #00829b;border-top-style: solid;border-top-color: #00829b;border-right-style: solid;border-right-color: #00829b;border-bottom-style: solid;border-bottom-color: #00829b;border-left-style: solid;border-left-color: #00829b;opacity: 1;filter: blur(0px);" data-bs-target="#toast-1" data-bs-toggle="toast"><span style="font-size: 24px;text-align: left;background: var(--bs-btn-active-color);padding-top: 0px;padding-bottom: 0px;padding-left: 12px;padding-right: 12px;color: #00829b;font-weight: bold;">Тауке хан</span><span style="font-size: 18px;text-shadow: 0px 0px 4px rgb(0,0,0);font-weight: bold;">(1652-1718)</span></button></div>
+    </div>
+    <hr style="margin-top: 40px;">
+    <div class="toast fade font-monospace text-truncate text-break hide" role="alert" data-bs-delay="2000" id="toast-1">
+        <div class="toast-header"><img class="me-2"><strong class="me-auto">Это макет. Нажмите в "Мавзолеи"</strong><button class="btn-close ms-2 mb-1 close" type="button" aria-label="Close" data-bs-dismiss="toast"></button></div>
+    </div>
+    <nav class="navbar navbar-light navbar-expand fixed-bottom bg-white border-dark d-flex flex-fill justify-content-center align-items-center" style="box-shadow: 1px 0px 12px 1px var(--bs-navbar-disabled-color);padding-top: 0;padding-bottom: 0;margin-right: 0px;height: 60px;">
+        <div class="container-fluid">
+            <div class="btn-group flex-fill" role="group"><a class="btn d-flex flex-column align-items-center" role="button" id="bottom-nav-btn" style="color: var(--bs-link-hover-color);" href="index.html"><i class="fas fa-list-ul" style="font-size: 18px;color: #00829b;"></i><span class="d-flex" style="font-size: 13px;color: #00829b;">Список мест</span></a><a class="btn d-flex flex-column align-items-center" role="button" id="bottom-nav-btn" style="color: var(--bs-navbar-color);" href="map.html"><i class="fas fa-map-marker-alt" style="font-size: 18px;color: var(--bs-gray-600);"></i><span class="d-flex" style="font-size: 13px;color: var(--bs-gray-600);">Карта</span></a><a class="btn d-flex flex-column align-items-center" role="button" id="bottom-nav-btn" style="/*color: var(--bs-navbar-color);*/" href="heart.html"><i class="fas fa-heart" style="font-size: 18px;color: var(--bs-gray-600);"></i><span class="d-flex" style="font-size: 13px;color: var(--bs-gray-600);">Избранное</span></a></div>
+        </div>
+    </nav>
+    <div class="offcanvas offcanvas-start bg-body" tabindex="-1" data-bs-backdrop="false" id="offcanvas-menu">
+        <div class="offcanvas-header"><a class="link-body-emphasis d-flex align-items-center me-md-auto mb-3 mb-md-0 text-decoration-none" href="/"><i class="fas fa-map me-3" style="font-size: 25px;color: #00829b;"></i><span class="fs-4">KazMaps</span></a><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="offcanvas"></button></div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between pt-0">
+            <div>
+                <hr class="mt-0">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item"><a class="nav-link active link-light" href="#" aria-current="page" style="background: #00829b;border-radius: 2px;"><i class="fas fa-home me-2"></i>Главная</a></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-list-ul me-2"></i> Список мест</a><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-map-marker-alt me-2"></i> Карта</a></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-newspaper me-2"></i> Новости</a></li>
+                    <li class="nav-item"><a class="nav-link link-body-emphasis" href="#"><i class="fas fa-file-contract me-2"></i>&nbsp;Обратная связь</a></li>
+                </ul>
+            </div>
+            <div>
+                <hr>
+                <div class="dropdown show"><a class="dropdown-toggle link-body-emphasis d-flex align-items-center text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown" role="button"><img class="rounded-circle me-2" alt="" width="32" height="32" src="assets/img/index.png" style="object-fit: cover;"><strong>Привет, Султангали</strong>&nbsp;</a>
+                    <div class="dropdown-menu show shadow text-small" data-bs-popper="none" data-popper-placement="top-start"><a class="dropdown-item" href="#">Профиль</a><a class="dropdown-item" href="#">История</a><a class="dropdown-item" href="#">Настройки</a>
+                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Выйти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="modal-1">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Поиск</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center" style="border-radius: 0px;"><input type="search" style="border-top-left-radius: 4px;border-bottom-left-radius: 4px;width: 228px;border: 1px solid rgb(0,130,155);padding-left: 10px;" placeholder="Введите"><button class="btn btn-primary" type="button" style="border-radius: 0px;background: rgb(0,130,155);border-style: solid;border-color: rgb(0,130,155);border-top-right-radius: 4px;border-bottom-right-radius: 4px;">Искать</button></div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+</body>
+
+</html>
